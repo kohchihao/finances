@@ -1,13 +1,6 @@
-// type UseInvestmentCalculatorParams = {
-//   principal: number;
-//   years: number;
-//   rate: number;
-//   additionalContribution: number;
-//   contributeAtStart?: boolean;
-// };
-
 import { useState } from 'react';
 import useFutureValue from './useFutureValue';
+import useMonthlyBreakdown from './useMonthlyBreakdown';
 
 const useInvestmentCalculator = () => {
   const [principal, setPrincipal] = useState(0);
@@ -24,6 +17,14 @@ const useInvestmentCalculator = () => {
     contributeAtStart,
   });
 
+  const monthlyBreakdown = useMonthlyBreakdown({
+    principal,
+    years,
+    rate,
+    additionalContribution,
+    contributeAtStart,
+  });
+
   return {
     endingBalance: futureValue,
     setPrincipal,
@@ -31,6 +32,7 @@ const useInvestmentCalculator = () => {
     setYears,
     setAdditionalContribution,
     setContributeAtStart,
+    ...monthlyBreakdown,
   };
 };
 

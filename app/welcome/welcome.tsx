@@ -9,6 +9,9 @@ export function Welcome() {
     setYears,
     setRate,
     setAdditionalContribution,
+    monthlyBreakdown,
+    summary,
+    calculateMonthlyBreakdown,
   } = useInvestmentCalculator();
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
@@ -27,7 +30,7 @@ export function Welcome() {
             />
           </div>
         </header>
-        <div className="max-w-[300px] w-full space-y-6 px-4">
+        <div className="max-w-[500px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
               What&apos;s next?
@@ -79,6 +82,17 @@ export function Welcome() {
           <span className="text-gray-700 dark:text-gray-200">
             {endingBalance}
           </span>
+
+          <button
+            className="w-full p-3 rounded-3xl bg-blue-600 text-white"
+            onClick={calculateMonthlyBreakdown}
+          >
+            Calculate
+          </button>
+
+          <span> {JSON.stringify(monthlyBreakdown, null, 2)}</span>
+
+          <span> {JSON.stringify(summary, null, 2)}</span>
         </div>
       </div>
     </main>
