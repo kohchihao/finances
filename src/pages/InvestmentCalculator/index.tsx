@@ -8,6 +8,7 @@ import {
 } from '@mantine/core';
 import { IconCurrencyDollar, IconPercentage } from '@tabler/icons-react';
 
+import { formatCurrency } from '../../utils/currency';
 import useInvestmentCalculator from './viewModel';
 
 export function InvestmentCalculator() {
@@ -25,10 +26,10 @@ export function InvestmentCalculator() {
   const rows = monthlyBreakdown.map((element) => (
     <Table.Tr key={element.month}>
       <Table.Td>{element.month}</Table.Td>
-      <Table.Td>{element.pv}</Table.Td>
-      <Table.Td>{element.pmt}</Table.Td>
-      <Table.Td>{element.interestEarned}</Table.Td>
-      <Table.Td>{element.fv}</Table.Td>
+      <Table.Td>{formatCurrency(element.pv)}</Table.Td>
+      <Table.Td>{formatCurrency(element.pmt)}</Table.Td>
+      <Table.Td>{formatCurrency(element.interestEarned)}</Table.Td>
+      <Table.Td>{formatCurrency(element.fv)}</Table.Td>
     </Table.Tr>
   ));
 
@@ -92,9 +93,9 @@ export function InvestmentCalculator() {
           </Table.Thead>
           <Table.Tbody>
             <Table.Tr>
-              <Table.Td>{summary.endingValue}</Table.Td>
-              <Table.Td>{summary.totalContributions}</Table.Td>
-              <Table.Td>{summary.totalInterestEarned}</Table.Td>
+              <Table.Td>{formatCurrency(summary.endingValue)}</Table.Td>
+              <Table.Td>{formatCurrency(summary.totalContributions)}</Table.Td>
+              <Table.Td>{formatCurrency(summary.totalInterestEarned)}</Table.Td>
             </Table.Tr>
           </Table.Tbody>
         </Table>

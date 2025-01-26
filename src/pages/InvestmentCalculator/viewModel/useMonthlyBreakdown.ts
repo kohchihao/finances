@@ -10,10 +10,10 @@ type UseFutureValueParams = {
 
 interface BreakdownEntry {
   month: number;
-  pv: string;
-  pmt: string;
-  interestEarned: string;
-  fv: string;
+  pv: number;
+  pmt: number;
+  interestEarned: number;
+  fv: number;
 }
 
 const useMonthlyBreakdown = ({
@@ -59,15 +59,15 @@ const useMonthlyBreakdown = ({
 
       breakdownData.push({
         month: i,
-        pv: pv.toFixed(2),
-        pmt: pmt.toFixed(2),
-        interestEarned: interestEarned.toFixed(2),
-        fv: fv.toFixed(2),
+        pv: pv,
+        pmt: pmt,
+        interestEarned: interestEarned,
+        fv: fv,
       });
     }
 
     setBreakdown(breakdownData);
-    return fv.toFixed(2);
+    return fv;
   };
 
   const calculateSummary = () => {
@@ -76,18 +76,18 @@ const useMonthlyBreakdown = ({
 
     // Calculate total interest earned and total contributions
     breakdown.forEach((month) => {
-      totalInterestEarned += parseFloat(month.interestEarned);
-      totalContributions += parseFloat(month.pmt);
+      totalInterestEarned += month.interestEarned;
+      totalContributions += month.pmt;
     });
 
     // Ending value is the last month's FV
     const endingValue =
-      breakdown.length > 0 ? parseFloat(breakdown[breakdown.length - 1].fv) : 0;
+      breakdown.length > 0 ? breakdown[breakdown.length - 1].fv : 0;
 
     return {
-      endingValue: endingValue.toFixed(2),
-      totalInterestEarned: totalInterestEarned.toFixed(2),
-      totalContributions: totalContributions.toFixed(2),
+      endingValue: endingValue,
+      totalInterestEarned: totalInterestEarned,
+      totalContributions: totalContributions,
     };
   };
 
