@@ -1,5 +1,12 @@
-import logoDark from './logo-dark.svg';
-import logoLight from './logo-light.svg';
+import {
+  Button,
+  Container,
+  NumberInput,
+  Stack,
+  Switch,
+  Table,
+} from '@mantine/core';
+
 import useInvestmentCalculator from './viewModel';
 
 export function Welcome() {
@@ -9,93 +16,97 @@ export function Welcome() {
     setYears,
     setRate,
     setAdditionalContribution,
+    setContributeAtStart,
     monthlyBreakdown,
     summary,
     calculateMonthlyBreakdown,
   } = useInvestmentCalculator();
+
+  const rows = monthlyBreakdown.map((element) => (
+    <Table.Tr key={element.month}>
+      <Table.Td>{element.month}</Table.Td>
+      <Table.Td>{element.pv}</Table.Td>
+      <Table.Td>{element.pmt}</Table.Td>
+      <Table.Td>{element.interestEarned}</Table.Td>
+      <Table.Td>{element.fv}</Table.Td>
+    </Table.Tr>
+  ));
+
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img
-              src={logoLight}
-              alt="React Router"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src={logoDark}
-              alt="React Router"
-              className="hidden w-full dark:block"
-            />
-          </div>
-        </header>
-        <div className="max-w-[500px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
-            </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+    <Container>
+      <Stack justify="center" gap="md">
+        <NumberInput
+          label="Initial Amount"
+          placeholder="Initial Amount"
+          decimalScale={2}
+          fixedDecimalScale
+          onChange={(v) => setPrincipal(Number(v))}
+        />
+        <NumberInput
+          label="After (years)"
+          placeholder="After how many years?"
+          min={0}
+          max={150}
+          onChange={(v) => setYears(Number(v))}
+        />
+        <NumberInput
+          label="Return Rate (%)"
+          placeholder="Return Rate (%)"
+          decimalScale={2}
+          onChange={(v) => setRate(Number(v))}
+        />
+        <NumberInput
+          label="Additional Contribution"
+          placeholder="Additional Contribution"
+          decimalScale={2}
+          fixedDecimalScale
+          onChange={(v) => setAdditionalContribution(Number(v))}
+        />
 
-          <input
-            type="number"
-            className="w-full p-3 rounded-3xl border border-gray-200 dark:border-gray-700"
-            placeholder="Starting Amount"
-            onChange={(e) => setPrincipal(Number(e.target.value))}
-          />
-          <input
-            type="number"
-            className="w-full p-3 rounded-3xl border border-gray-200 dark:border-gray-700"
-            placeholder="After Years"
-            onChange={(e) => setYears(Number(e.target.value))}
-          />
+        <Switch
+          label="Contribute at the beginning of each month?"
+          onChange={(event) =>
+            setContributeAtStart(event.currentTarget.checked)
+          }
+        />
 
-          <input
-            type="number"
-            className="w-full p-3 rounded-3xl border border-gray-200 dark:border-gray-700"
-            placeholder="Return Rate (%)"
-            onChange={(e) => setRate(Number(e.target.value))}
-          />
+        <Button fullWidth onClick={calculateMonthlyBreakdown}>
+          Calculate
+        </Button>
 
-          <input
-            type="number"
-            className="w-full p-3 rounded-3xl border border-gray-200 dark:border-gray-700"
-            placeholder="Contribution"
-            onChange={(e) => setAdditionalContribution(Number(e.target.value))}
-          />
+        <Table>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Ending Balance</Table.Th>
+              <Table.Th>Total Contributions</Table.Th>
+              <Table.Th>Total Interest Earned</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td>{summary.endingValue}</Table.Td>
+              <Table.Td>{summary.totalContributions}</Table.Td>
+              <Table.Td>{summary.totalInterestEarned}</Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
 
-          <span className="text-gray-700 dark:text-gray-200">
-            {endingBalance}
-          </span>
-
-          <button
-            className="w-full p-3 rounded-3xl bg-blue-600 text-white"
-            onClick={calculateMonthlyBreakdown}
-          >
-            Calculate
-          </button>
-
-          <span> {JSON.stringify(monthlyBreakdown, null, 2)}</span>
-
-          <span> {JSON.stringify(summary, null, 2)}</span>
-        </div>
-      </div>
-    </main>
+        <Table.ScrollContainer minWidth={500}>
+          <Table striped highlightOnHover withTableBorder withColumnBorders>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Month</Table.Th>
+                <Table.Th>PV</Table.Th>
+                <Table.Th>PMT</Table.Th>
+                <Table.Th>Interest</Table.Th>
+                <Table.Th>FV</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
+      </Stack>
+    </Container>
   );
 }
 
