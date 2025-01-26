@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type UseFutureValueParams = {
   principal: number;
@@ -24,11 +25,19 @@ const useMonthlyBreakdown = ({
   contributeAtStart,
 }: UseFutureValueParams) => {
   const [breakdown, setBreakdown] = useState<BreakdownEntry[]>([]);
+  const [_, setSearchParams] = useSearchParams();
 
   const calculateMonthlyBreakdown = () => {
     if (!principal || !years || !rate) {
       return;
     }
+
+    setSearchParams({
+      principal: principal.toString(),
+      years: years.toString(),
+      rate: rate.toString(),
+      additionalContribution: additionalContribution.toString(),
+    });
 
     const months = years * 12;
     const annualRate = rate / 100;

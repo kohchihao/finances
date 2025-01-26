@@ -8,11 +8,16 @@ import {
 } from '@mantine/core';
 import { IconCurrencyDollar, IconPercentage } from '@tabler/icons-react';
 
+import { useEffect } from 'react';
 import { formatCurrency } from '../../utils/currency';
 import useInvestmentCalculator from './viewModel';
 
 export function InvestmentCalculator() {
   const {
+    principal,
+    rate,
+    years,
+    additionalContribution,
     setPrincipal,
     setYears,
     setRate,
@@ -22,6 +27,12 @@ export function InvestmentCalculator() {
     summary,
     calculateMonthlyBreakdown,
   } = useInvestmentCalculator();
+
+  useEffect(() => {
+    if (principal && years && rate) {
+      calculateMonthlyBreakdown();
+    }
+  }, []);
 
   const rows = monthlyBreakdown.map((element) => (
     <Table.Tr key={element.month}>
@@ -43,6 +54,7 @@ export function InvestmentCalculator() {
           fixedDecimalScale
           onChange={(v) => setPrincipal(Number(v))}
           size="md"
+          value={principal}
           leftSection={<IconCurrencyDollar />}
         />
         <NumberInput
@@ -51,6 +63,7 @@ export function InvestmentCalculator() {
           min={0}
           max={150}
           onChange={(v) => setYears(Number(v))}
+          value={years}
           size="md"
         />
         <NumberInput
@@ -59,6 +72,7 @@ export function InvestmentCalculator() {
           decimalScale={2}
           onChange={(v) => setRate(Number(v))}
           size="md"
+          value={rate}
           rightSection={<IconPercentage />}
         />
         <NumberInput
@@ -68,6 +82,7 @@ export function InvestmentCalculator() {
           fixedDecimalScale
           onChange={(v) => setAdditionalContribution(Number(v))}
           size="md"
+          value={additionalContribution}
           leftSection={<IconCurrencyDollar />}
         />
 
