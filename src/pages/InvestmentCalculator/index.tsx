@@ -6,6 +6,7 @@ import {
   Switch,
   Table,
 } from '@mantine/core';
+import { IconCurrencyDollar, IconPercentage } from '@tabler/icons-react';
 
 import useInvestmentCalculator from './viewModel';
 
@@ -40,6 +41,8 @@ export function InvestmentCalculator() {
           decimalScale={2}
           fixedDecimalScale
           onChange={(v) => setPrincipal(Number(v))}
+          size="md"
+          leftSection={<IconCurrencyDollar />}
         />
         <NumberInput
           label="After (years)"
@@ -47,12 +50,15 @@ export function InvestmentCalculator() {
           min={0}
           max={150}
           onChange={(v) => setYears(Number(v))}
+          size="md"
         />
         <NumberInput
           label="Return Rate (%)"
           placeholder="Return Rate (%)"
           decimalScale={2}
           onChange={(v) => setRate(Number(v))}
+          size="md"
+          rightSection={<IconPercentage />}
         />
         <NumberInput
           label="Additional Contribution"
@@ -60,9 +66,12 @@ export function InvestmentCalculator() {
           decimalScale={2}
           fixedDecimalScale
           onChange={(v) => setAdditionalContribution(Number(v))}
+          size="md"
+          leftSection={<IconCurrencyDollar />}
         />
 
         <Switch
+          size="md"
           label="Contribute at the beginning of each month?"
           onChange={(event) =>
             setContributeAtStart(event.currentTarget.checked)
