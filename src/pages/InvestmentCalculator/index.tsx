@@ -45,7 +45,7 @@ export function InvestmentCalculator() {
   ));
 
   return (
-    <Container>
+    <Container px={0}>
       <Stack justify="center" gap="md">
         <NumberInput
           label="Initial Amount"
